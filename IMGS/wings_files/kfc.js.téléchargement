@@ -1,0 +1,251 @@
+
+$(document).ready(function() {
+    //console.log("productCount",productCount);
+    $('#close-modal').on('click',function(){
+        $('#kfcModal').modal('hide');
+    })
+    $('.js-popup').on('click',function(e){
+        e.preventDefault();
+        $('#kfcModal').modal('show');
+    })
+
+    $('#choice1').on('click',function() {
+        $('.map-img').removeClass('map-shown');
+        $('.map-img').addClass('map-hidden');
+    })
+
+    $('#choice2').on('click',function() {
+        $('.map-img').removeClass('map-hidden');
+        $('.map-img').addClass('map-shown');
+    })
+
+    /*$('.bi-arrow-left-short').on('click',function(){
+        if($('#choice2').hasClass('choice-selected')){
+            $('.kfc-map').hide();
+        }
+    })*/
+
+    
+
+    
+
+    
+    // product detail, when you click on add to cart display popup.
+    $body = $('body').attr('id');
+    /*if(id_shop == 1){
+        //change id submitNdkcsfields to newID
+        $('#submitNdkcsfields').attr('id','newID');
+        //change class quick-view to new-quick-view
+        $('.quick-view').attr('class','new-quick-view')
+        $('#newID ').on('click',function (e){
+            e.preventDefault();
+
+            $('#kfcModal').modal('show');
+            setTimeout(function(){ macarte.invalidateSize()}, 500);
+        })
+        // home page, when you click on wish display popup.
+        $('.wish').on('click',function (e){
+            e.preventDefault();
+            $('#kfcModal').modal('show');
+            setTimeout(function(){ macarte.invalidateSize()}, 500);
+        });
+        // home page, when you click on quick view display popup.
+        $('.new-quick-view ').on('click',function (e){
+            e.preventDefault();
+            $('#kfcModal').modal('show');
+            setTimeout(function(){ macarte.invalidateSize()}, 500);
+            $('#quickview-modal-21-0').modal('hide');
+        });
+        // home page, when you click on  add to cart display popup.
+        $('.cartb').on('click',function (e){
+            e.preventDefault();
+            $('#kfcModal').modal('show');
+            setTimeout(function(){ macarte.invalidateSize()}, 500);
+        });
+
+    }*/
+
+    $('#show-modal').on('click',function (e){
+            e.preventDefault();
+            Cookies.set('orderType', 'PICKING', {expires: null});
+            $('#kfcModal').modal('show');
+
+           /* if(productCount !=0){
+                    console.log("show notif")
+                   showNotif();
+                }
+            */
+        }
+
+    );
+
+    $('.edit-address').on('click',function (e){
+            e.preventDefault();
+
+            $('#kfcModalAddress').modal('show');
+            $('#kfcModalAddress').on('shown.bs.modal', function(){
+                map.resize();
+            });
+
+        geolocation = null;
+        if (window.navigator && "geolocation" in window.navigator){
+            geolocation = window.navigator.geolocation;
+            if (geolocation){
+                navigator.geolocation.getCurrentPosition(position => {
+                    userLngAddress = position.coords.latitude;
+                    userLatAddress = position.coords.longitude;
+                    console.log(userLatAddress, userLngAddress);
+                    map.flyTo({center: [userLatAddress, userLngAddress], zoom: 13});
+                    marker2
+                        .setLngLat([userLatAddress, userLngAddress])
+                        .addTo(map);
+
+
+                });
+            }
+
+
+        }
+            /* if(productCount !=0){
+                     console.log("show notif")
+                    showNotif();
+                 }
+             */
+        }
+
+    );
+
+
+    prep_modal();
+    radio('choice1','choice2','outer-radio-1','inner-radio-1','outer-radio-2','inner-radio-2');
+    radio('choice2','choice1','outer-radio-2','inner-radio-2', 'outer-radio-1','inner-radio-1');
+    $('#map').on('shown', function () {
+        google.maps.event.trigger(map, "resize");
+    });
+    if($('#choice1').hasClass('choice-selected')){
+        $('.kfc-map').show();
+        $('#sv-map-validation').hide();
+    }
+    else{
+        $('.kfc-map').hide();
+        $('#sv-map-validation').hide();
+    }
+
+    if($('#choice2').hasClass('choice-selected')){
+        $('.kfc-map').hide();
+        $('#sv-map-validation').hide();
+    }
+
+    $('#choice1').on('click',function() {
+        $('.kfc-map').show();
+        $('#sv').hide();
+        $('#sv-map-validation').hide();
+        map.resize();
+        geolocation = null;
+        if (window.navigator && "geolocation" in window.navigator){
+            geolocation = window.navigator.geolocation;
+            if (geolocation){
+                navigator.geolocation.getCurrentPosition(position => {
+                        userLng = position.coords.latitude;
+                        userLat = position.coords.longitude;
+                        console.log(userLat, userLng);
+                        map.flyTo({center: [userLat, userLng], zoom: 13});
+                        marker2
+                            .setLngLat([userLat, userLng])
+                            .addTo(map);
+
+
+                });
+            }
+
+
+        }
+    });
+    $('#choice2').on('click',function() {
+        $('.kfc-map').hide();
+        $('.map-img').show();
+        $('#sv-map-validation').hide();
+        $('#sv').show();
+    })
+
+  });
+
+  /*$(document).ready(function() {
+    if(screen.width <=720){
+        $('#sv-map-validation').appendTo( $('.js-map-btn-responsive') );
+        //$('.js-map-btn-responsive').append('#sv-map-validation>#map-validation')
+    }
+  });*/
+
+    
+  
+  
+  function prep_modal()
+  {
+    $('#js-ship-home').hide();
+    $('#js-tri-resto').hide();
+    $('#btn-back').hide();
+    $('#btn-ship-valid').on('click',function(){
+        if($('div#outer-radio-1').hasClass('checked')){
+            $('#js-first-page').hide();
+            $('#js-ship-home').show();
+            $('#btn-back').show();
+            $('.kfc-map').show();
+        }
+        else if($('div#outer-radio-2').hasClass('checked')){
+            $('#js-first-page').hide();
+            $('#js-tri-resto').show();
+            $('#btn-back').show();
+            $('.kfc-map').hide();
+
+        }
+        else {
+            return false;
+        }
+    });
+      $('#btn-back').on('click',function () {
+          $('#js-first-page').show();
+          $('#js-ship-home').hide();
+          $('#js-tri-resto').hide();
+          $('#btn-back').hide();
+          if(!$('#choice2').hasClass('choice-selected')){
+            $('.kfc-map').show();
+          }
+          
+
+      });
+  }
+
+  
+
+  function radio(parent,otherchoice,child1,child2, otherchoice_child1, otherchoice_child2) {
+      $('div#'+parent).on('click',function() {
+           if(!$(this).hasClass('choice-selected')){
+               $('div#'+child1).addClass('checked');
+               $('div#'+child2).addClass('checked-inner');
+               $(this).addClass('choice-selected ');
+               $('#'+otherchoice).removeClass('choice-selected');
+               $('div#'+otherchoice_child1).removeClass('checked');
+               $('div#'+otherchoice_child2).removeClass('checked-inner');
+
+           }
+
+          else{
+               $('div#'+child1).removeClass('checked');
+               $('div#'+child2).removeClass('checked-inner');
+               $(this).removeClass('choice-selected ');
+
+           }
+      });
+  }
+
+
+
+/*function showNotif (){
+      console.log("function show notif")
+    $('#notif-modal').modal('show', function (e) {
+        setTimeout(function(){ $('#blockcart-modal').modal('hide'); }, 1000);
+    });
+
+}*/
+  
